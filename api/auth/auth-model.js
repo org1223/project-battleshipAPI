@@ -5,7 +5,7 @@ const {JWT_SECRET} = require('../auth/auth-secrets')
 function createToken(user){
  
     const payload = {
-      id: user.id,
+      user_id: user.user_id,
       username: user.username
     }
     const options = {
@@ -15,22 +15,40 @@ function createToken(user){
     return result
 }
 
+async function login(user_id){
+   return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 1}).returning('*');
+}
+
+async function logout(user_id){
+    return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 0}).returning('*');
+ }
+
 function find() {
-    return db('users').select('id', 'username')
+    return db('user').select('user_id', 'username')
+}
+
+async function findOnline(id) {
+    const online = await db('user').whereNot('user_id', id).andWhere('is_logged', true).first()
+    if(!online){
+        return false
+    }else{
+        return online
+    }
 }
 
 function findBy(filter) {
-    return db('users').where(filter)
+    return db('user').where(filter)
 }
 
-function findById(id) {
-    return db('users')
-    .where({id})
+async function findById(id) {
+    const user = await db('user').select('username', 'user_id')
+    .where('user_id', id)
     .first()
+    return user
 }
 
 async function add(user) {
-    const [id] = await db('users').insert(user)
+    const [id] = await db('user').insert(user)
     return findById(id)
 }
 
@@ -39,5 +57,8 @@ module.exports = {
     find,
     findBy,
     findById,
-    createToken
+    createToken,
+    findOnline,
+    login,
+    logout,
 }
