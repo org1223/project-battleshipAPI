@@ -4,7 +4,9 @@ exports.up = function(knex) {
    .createTable('user', user => {
     user.increments('user_id');
     user.string('username', 10).notNullable().unique();
-    user.boolean('is_logged')
+    user.boolean('is_logged')    
+      .defaultTo(false);
+    user.boolean('is_in_match')
       .defaultTo(false);
     //user.integer('created_at').notNullable()
     //user.integer('updated_at')

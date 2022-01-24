@@ -16,11 +16,11 @@ function createToken(user){
 }
 
 async function login(user_id){
-   return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 1}).returning('*');
+   return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 1, is_in_match: 0});
 }
 
 async function logout(user_id){
-    return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 0}).returning('*');
+    return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 0, is_in_match: 0});
  }
 
 function find() {
@@ -28,10 +28,12 @@ function find() {
 }
 
 async function findOnline(id) {
-    const online = await db('user').whereNot('user_id', id).andWhere('is_logged', true).first()
+    const online = await db('user').whereNot('user_id', id).whereNot('is_in_match', true).andWhere('is_logged', true).first()
     if(!online){
         return false
     }else{
+        await db('user').where('user_id', id).update({is_in_match: 1})
+        await db('user').where('user_id',online.user_id).update({is_in_match: 1})
         return online
     }
 }
