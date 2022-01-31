@@ -4,10 +4,6 @@ exports.up = function(knex) {
    .createTable('user', user => {
     user.increments('user_id');
     user.string('username', 10).notNullable().unique();
-    user.boolean('is_logged')    
-      .defaultTo(false);
-    user.boolean('is_in_match')
-      .defaultTo(false);
     //user.integer('created_at').notNullable()
     //user.integer('updated_at')
    })
@@ -33,8 +29,13 @@ exports.up = function(knex) {
       match.integer('challenger_ships').references('field_map_id').inTable('field_map');
 
       match.integer('winner').references('user_id').inTable('user')
-      match.boolean('is_game_over')
-         .defaultTo(false);
+   })
+   .createTable('invite', match => {
+      match.increments('invite_id');
+
+      match.integer('challenger_user_id').references('user_id').inTable('user');
+
+      match.integer('defender_user_id').references('user_id').inTable('user');
    })
   
    
@@ -43,6 +44,7 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
    return knex.schema
+   .dropTableIfExists('invite')
    .dropTableIfExists('match')
    .dropTableIfExists('field_map')
    .dropTableIfExists('user');

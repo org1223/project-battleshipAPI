@@ -15,27 +15,30 @@ function createToken(user){
     return result
 }
 
-async function login(user_id){
-   return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 1, is_in_match: 0});
+async function login(user_id){ //could be combined with logout model
+   return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 1});
 }
 
 async function logout(user_id){
-    return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 0, is_in_match: 0});
- }
+    return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 0});
+}
+
+async function findOthers (id) {
+    const others = await db('user').whereNot('user_id', id)
+    if(!others){
+        return "no players found :("
+    }else{
+        return others
+    }
+}
+
+async function endMatch(id) {// probably will be removed
+    //const player = await db('user').where('user_id', id).update({is_in_match: 0})
+    console.log(player)
+}
 
 function find() {
     return db('user').select('user_id', 'username')
-}
-
-async function findOnline(id) {
-    const online = await db('user').whereNot('user_id', id).whereNot('is_in_match', true).andWhere('is_logged', true).first()
-    if(!online){
-        return false
-    }else{
-        await db('user').where('user_id', id).update({is_in_match: 1})
-        await db('user').where('user_id',online.user_id).update({is_in_match: 1})
-        return online
-    }
 }
 
 function findBy(filter) {
@@ -43,7 +46,7 @@ function findBy(filter) {
 }
 
 async function findById(id) {
-    const user = await db('user').select('username', 'user_id')
+    const user = await db('user').select('*')
     .where('user_id', id)
     .first()
     return user
@@ -60,7 +63,8 @@ module.exports = {
     findBy,
     findById,
     createToken,
-    findOnline,
+    findOthers,
     login,
     logout,
+    endMatch
 }
