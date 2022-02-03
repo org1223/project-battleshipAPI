@@ -30,7 +30,7 @@ router.post('/invite', async (req, res, next) => {
 
 router.get('/invite', async (req, res, next) => {
     try{
-        const check = await Match.checkInvites(req.body.user_id)
+        //const check = await Match.checkIfInvites(req.body.user_id)
         if(check){
             res.status(200).json({message:{check}})
         }

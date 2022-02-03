@@ -29,8 +29,8 @@ async function checkSubmission(req ,res, next) {
 async function checkLogin (req ,res, next){
     try{
         
-        if(!req.body.user_id){
-          next({status:400, message:'user_id required'})
+        if(!req.body.user_id || !req.body.username){
+          next({status:400, message:'user_id and username required'})
   
         }else{
           const [userFromDB] = await Users.findBy({user_id: req.body.user_id})

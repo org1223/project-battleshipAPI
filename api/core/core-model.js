@@ -7,9 +7,7 @@ async function inviteUser(challenger_id, defender_id){
     return await db('invite').select('*').where('challenger_user_id', challenger_id).andWhere('defender_user_id', defender_id)
 }
 
-async function checkInvites(challenger_id){
-    return await db('invite').select('*').where('challenger_user_id', challenger_id)
-}
+
 
 async function replyToInvite(bool, invite_id){
     if(bool){
@@ -35,7 +33,6 @@ async function endMatch (match_id){
 
 module.exports = {
     inviteUser,
-    checkInvites,
     createMatch,
     endMatch,
     replyToInvite

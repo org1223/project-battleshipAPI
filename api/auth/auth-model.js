@@ -15,20 +15,21 @@ function createToken(user){
     return result
 }
 
-async function login(user_id){ //could be combined with logout model
-   return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 1});
-}
-
-async function logout(user_id){
-    return await db('user').where('user_id', user_id).select('is_logged').update({is_logged: 0});
-}
-
 async function findOthers (id) {
     const others = await db('user').whereNot('user_id', id)
     if(!others){
         return "no players found :("
     }else{
         return others
+    }
+}
+
+async function checkIfInvites(user_id){
+    const invites = await db('invite').select('*').where('defender_user_id', user_id)
+    if(!invites){
+        return 'none found'
+    }else{
+        return invites
     }
 }
 
@@ -64,7 +65,6 @@ module.exports = {
     findById,
     createToken,
     findOthers,
-    login,
-    logout,
+    checkIfInvites,
     endMatch
 }
