@@ -3,9 +3,8 @@ exports.up = function(knex) {
    return knex.schema
    .createTable('user', user => {
     user.increments('user_id');
-    user.string('username', 10).notNullable().unique();
-    //user.integer('created_at').notNullable()
-    //user.integer('updated_at')
+    user.string('username', 12).notNullable().unique();
+    user.string('password', 256).notNullable();
    })
    .createTable('field_map', map => {
       map.increments('field_map_id');
@@ -37,8 +36,6 @@ exports.up = function(knex) {
 
       match.integer('defender_user_id').references('user_id').inTable('user');
    })
-  
-   
   
 };
 

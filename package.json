@@ -13,14 +13,18 @@
   "author": "Waylay70K & Uzi",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.15",
     "pg": "^8.7.1",
+    "socket.io": "^4.4.1",
+    "socketio-jwt": "^4.6.2",
     "sqlite3": "^5.0.2"
   },
   "devDependencies": {
     "dotenv": "^14.2.0",
+    "http-server": "^14.1.0",
     "nodemon": "^2.0.15"
   },
   "engines": {

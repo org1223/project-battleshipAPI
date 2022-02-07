@@ -1,13 +1,15 @@
 const express = require('express');
 const authRouter = require('../auth/auth-router');
-const coreRouter = require('../core/core-router')
-const{restrict} = require('../middleware/auth-middle')
+const coreRouter = require('../core/core-router');
+const{restrict} = require('../middleware/auth-middle');
+const http = require('http');
 
 const server = express();
+const httpServer = http.createServer(server);
 server.use(express.json());
 
 server.use('/api/auth', authRouter);
-server.use('/api/core', coreRouter); //needs coreRouter // only logged-in users should have access!
+server.use('/api/core', coreRouter, restrict); //needs coreRouter // only logged-in users should have access!
 
 
 server.use((err, req, res, next) => { // eslint-disable-line
@@ -18,4 +20,4 @@ server.use((err, req, res, next) => { // eslint-disable-line
 });
 
 
-module.exports = server;
+module.exports = httpServer;
