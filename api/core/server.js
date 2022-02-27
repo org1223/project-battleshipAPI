@@ -2,8 +2,6 @@ const express = require('express');
 const authRouter = require('../auth/auth-router');
 const coreRouter = require('../core/core-router');
 const {restrict} = require('../middleware/auth-middle');
-const {JWT_SECRET} = require('../auth/auth-secrets')
-const jwt = require('jsonwebtoken')
 const cors = require('cors');
 const http = require('http');
 
@@ -16,6 +14,7 @@ const server = express();
 const httpServer = http.createServer(server);
 const io = require('socket.io')(httpServer, {cors: corsOptions} )
 server.use(express.json(), cors(corsOptions));// in dev
+
 server.use('/api/auth', authRouter);
 server.use('/api/core', coreRouter, restrict); //needs coreRouter // only logged-in users should have access!
  
@@ -24,7 +23,7 @@ const socket_tools = require('./socket-tools');
 socket_tools.start(io); // imported socket functions *needs work*
 
 
-
+server.get('/', (req, res, next)=> { res.status(200)});
 
 
 server.use((err, req, res, next) => { // eslint-disable-line

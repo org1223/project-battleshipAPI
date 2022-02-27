@@ -1,18 +1,16 @@
 const db = require('../../data/dbConfig')
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../auth/auth-secrets')
+const {JWT_SECRET} = require('../../variableConfig')
 
 function createToken(user){
  
     const payload = {
       user_id: user.user_id,
-      username: user.username,
     }
     const options = {
       expiresIn: '1d'               // needs work
     }
-    const result = jwt.sign(payload, JWT_SECRET , options)
-    return result
+    return jwt.sign(payload, JWT_SECRET , options)
 }
 
 async function findOthers (id) {

@@ -1,4 +1,4 @@
-// Update with your config settings.
+const {PG_HOST, PG_PORT, PG_DATABASE, PG_USER, PG_PASSWORD} = require('./variableConfig')
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -19,11 +19,11 @@ module.exports = {
     client: 'pg',
     migrations: { directory: __dirname + '/data/migrations' },
     connection: {
-      host:     'localhost',
-      port:     '5432',
-      database: 'battleship_db',
-      user:     'postgres',
-      password: 'waylay'
+      host:     PG_HOST,
+      port:     PG_PORT,
+      database: PG_DATABASE,
+      user:     PG_USER,
+      password: PG_PASSWORD
     },
 
   },

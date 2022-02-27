@@ -1,6 +1,6 @@
 const Users = require('../auth/auth-model')
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../auth/auth-secrets')
+const {JWT_SECRET} = require('../../variableConfig')
 const bcrypt = require('bcryptjs')
 
 async function checkSubmission(req ,res, next) {
