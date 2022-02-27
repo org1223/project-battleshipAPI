@@ -1,6 +1,6 @@
 const db = require('../../data/dbConfig')
 
-
+// ***entire file is subject to changes***
 
 async function inviteUser(challenger_id, defender_id){
     await db('invite').insert({defender_user_id: defender_id, challenger_user_id:challenger_id})

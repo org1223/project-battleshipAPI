@@ -4,21 +4,28 @@
  * @type { Object.<string, import("knex").Knex.Config> }
  */
 
+/*                      old line for SQLite3
 const sharedConfig = {
   pool: { afterCreate: (conn, done) => conn.run('PRAGMA foreign_keys = ON', done) },
-}
+} ...sharedCongfig
+*/
+
 
 module.exports = {
 
   
 
   development: {
-    client: 'sqlite3',
-    migrations: { directory: './data/migrations' },
+    client: 'pg',
+    migrations: { directory: __dirname + '/data/migrations' },
     connection: {
-      filename: './dev.sqlite3'
+      host:     'localhost',
+      port:     '5432',
+      database: 'battleship_db',
+      user:     'postgres',
+      password: 'waylay'
     },
-    ...sharedConfig
+
   },
 
   staging: {
@@ -35,7 +42,7 @@ module.exports = {
     migrations: {
       tableName: 'knex_migrations'
     },
-    ...sharedConfig
+
   },
 
   production: {
@@ -52,7 +59,7 @@ module.exports = {
     migrations: {
       tableName: 'knex_migrations'
     },
-    ...sharedConfig
+
   }
 
 };
