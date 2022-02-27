@@ -8,12 +8,14 @@ const Users = require('./auth-model')
 router.post('/register', checkSubmission, async (req, res, next) => {
   
     try{
-        const { username, password } = req.body
+        const { username, password, user_id } = req.body
         const newUser = {
-            username,
-            password: bcrypt.hashSync(password.toString(), BCRYPT_ROUNDS)
+          user_id,  
+          username,
+          password: bcrypt.hashSync(password.toString(), BCRYPT_ROUNDS)   
         }
-        const created = await Users.add(newUser)
+        const created = await Users.add(newUser, req.body.user_id)
+        console.log(created)
         res.status(201).json({message:{username: created.username, user_id: created.user_id}})
     }catch (err){
         next(err)

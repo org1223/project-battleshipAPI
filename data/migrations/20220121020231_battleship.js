@@ -2,8 +2,8 @@
 exports.up = function(knex) {
    return knex.schema
    .createTable('user', user => {
-    user.increments('user_id');
-    user.string('username', 12).notNullable().unique();
+    user.string('user_id').notNullable().unique();
+    user.string('username', 15).notNullable().unique();
     user.string('password', 256).notNullable();
    })
    .createTable('field_map', map => {
@@ -17,24 +17,24 @@ exports.up = function(knex) {
       }
    })
    .createTable('match', match => {
-      match.increments('match_id');
+      match.integer('match_id');
 
-      match.integer('defender_user_id').references('user_id').inTable('user');
+      match.string('defender_user_id').references('user_id').inTable('user');
       match.integer('defender_shots').references('field_map_id').inTable('field_map');
       match.integer('defender_ships').references('field_map_id').inTable('field_map');
 
-      match.integer('challenger_user_id').references('user_id').inTable('user');
+      match.string('challenger_user_id').references('user_id').inTable('user');
       match.integer('challenger_shots').references('field_map_id').inTable('field_map');
       match.integer('challenger_ships').references('field_map_id').inTable('field_map');
 
-      match.integer('winner').references('user_id').inTable('user')
+      match.string('winner').references('user_id').inTable('user')
    })
    .createTable('invite', match => {
       match.increments('invite_id');
 
-      match.integer('challenger_user_id').references('user_id').inTable('user');
+      match.string('challenger_user_id').references('user_id').inTable('user');
 
-      match.integer('defender_user_id').references('user_id').inTable('user');
+      match.string('defender_user_id').references('user_id').inTable('user');
    })
   
 };

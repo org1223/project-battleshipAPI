@@ -34,16 +34,16 @@ function findBy(filter) {
     return db('user').where(filter)
 }
 
-async function findById(id) {
+async function findById(uuid) {
     const user = await db('user').select('*')
-    .where('user_id', id)
+    .where('user_id', uuid)
     .first()
     return user
 }
 
-async function add(user) {
-    const [id] = await db('user').insert(user)
-    return findById(id)
+async function add(user, uuid) {
+    await db('user').insert(user)
+    return findById(uuid)
 }
 
 module.exports = {
