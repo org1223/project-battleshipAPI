@@ -6,6 +6,10 @@ exports.up = function(knex) {
     user.string('username', 15).notNullable().unique();
     user.string('password', 256).notNullable();
    })
+   .createTable('token', token => {
+     token.string('token_id').references('user_id').inTable('user');
+     token.string('value').notNullable();
+   })
    .createTable('field_map', map => {
       map.increments('field_map_id');
       for(let x = 0; x !== 100; x++){
@@ -36,6 +40,7 @@ exports.up = function(knex) {
 
       match.string('defender_user_id').references('user_id').inTable('user');
    })
+   
   
 };
 
@@ -44,5 +49,6 @@ exports.down = function(knex) {
    .dropTableIfExists('invite')
    .dropTableIfExists('match')
    .dropTableIfExists('field_map')
-   .dropTableIfExists('user');
+   .dropTableIfExists('token')
+   .dropTableIfExists('user'); 
 };

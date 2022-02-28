@@ -1,6 +1,6 @@
 const db = require('../../data/dbConfig')
 const jwt = require('jsonwebtoken')
-const {JWT_SECRET} = require('../../variableConfig')
+const {JWT_SECRET, JWT_REFRESH} = require('../../variableConfig')
 
 function createToken(user){
  
@@ -8,9 +8,26 @@ function createToken(user){
       user_id: user.user_id,
     }
     const options = {
-      expiresIn: '1d'               // needs work
+        expiresIn: '15m'               // needs work
     }
-    return jwt.sign(payload, JWT_SECRET , options)
+    return jwt.sign(payload, JWT_SECRET, options)
+}
+
+async function refreshToken(user){
+    
+    const payload = {
+        user_id: user.user_id,
+    }
+    const options = {
+        expiresIn: '1d'
+    }
+    const token = jwt.sign(payload, JWT_REFRESH, options)
+    await db.insert({value:token, token_id:user.user_id}).into('token')
+    return token
+}
+
+async function revokeToken(token){
+    await db('token').del().where('refresh_token', token)
 }
 
 async function findOthers (id) {
@@ -24,8 +41,8 @@ async function findOthers (id) {
 
     // all below are pending SSL and postgress changes *subject to change*
 
-function find() {
-    return db('user').select('user_id', 'username')         
+function find(table, item, condition) {
+    return db(table).select(item, condition)         
 }
 
 function findBy(filter) {
@@ -51,4 +68,6 @@ module.exports = {
     findById,
     createToken,
     findOthers,
+    refreshToken,
+    revokeToken
 }

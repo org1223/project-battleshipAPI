@@ -1,7 +1,7 @@
 const express = require('express');
 const authRouter = require('../auth/auth-router');
 const coreRouter = require('../core/core-router');
-const {restrict} = require('../middleware/auth-middle');
+const {checkToken} = require('../middleware/auth-middle');
 const cors = require('cors');
 const http = require('http');
 
@@ -16,7 +16,7 @@ const io = require('socket.io')(httpServer, {cors: corsOptions} )
 server.use(express.json(), cors(corsOptions));// in dev
 
 server.use('/api/auth', authRouter);
-server.use('/api/core', coreRouter, restrict); //needs coreRouter // only logged-in users should have access!
+server.use('/api/core', coreRouter, checkToken); //needs coreRouter // only logged-in users should have access!
  
 const socket_tools = require('./socket-tools');
 
